@@ -1,0 +1,110 @@
+.tab-bar {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 0;
+  padding: 0 1rem;
+}
+
+.tab-btn {
+  position: relative;
+  padding: 0.7rem 1.6rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  background: #0a0a0a;
+  color: #c7ff00;
+  outline: none;
+
+  /* asymmetric rounded corners */
+  border-radius: 16px 6px 0 0;
+}
+
+.tab-btn:focus,
+.tab-btn:focus-visible {
+  outline: none;
+}
+
+.tab-btn:not(.active):focus,
+.tab-btn:not(.active):focus-visible {
+  box-shadow: none;
+}
+
+.tab-btn::before {
+  content: "";
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c7ff0044;
+  transition: all 0.3s ease;
+}
+
+/* ── inactive state ── */
+.tab-btn:not(.active) {
+  border-color: #c7ff0022;
+  background: #0a0a0a;
+}
+
+.tab-btn:not(.active):hover {
+  border-color: #c7ff0066;
+  background: #111;
+  transform: translateY(-2px);
+}
+
+.tab-btn:not(.active):hover::before {
+  background: #c7ff0088;
+}
+
+/* ── active state ── */
+.tab-btn.active {
+  background: #0a0a0a;
+  border-color: #c7ff00;
+  color: #c7ff00;
+  box-shadow:
+    0 0 12px #c7ff0044,
+    0 0 30px #c7ff0018,
+    inset 0 1px 0 #c7ff0022;
+  transform: translateY(-3px);
+  padding-bottom: 0.85rem;
+  z-index: 2;
+}
+
+.tab-btn.active::before {
+  background: #c7ff00;
+  box-shadow: 0 0 6px #c7ff00;
+}
+
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 80%;
+  height: 2px;
+  background: #c7ff00;
+  box-shadow: 0 0 8px #c7ff00;
+  border-radius: 2px 2px 0 0;
+}
+
+/* ── label spacing for the dot ── */
+.tab-label {
+  padding-left: 0.75rem;
+}
+
+/* ── neon divider line ── */
+.tab-divider {
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent 0%, #c7ff0066 15%, #c7ff00 50%, #c7ff0066 85%, transparent 100%);
+  box-shadow: 0 0 10px #c7ff0044, 0 0 25px #c7ff0018;
+  width: 85vw;
+  margin: 0 auto 1.5rem;
+}

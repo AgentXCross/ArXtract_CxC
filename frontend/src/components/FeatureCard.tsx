@@ -6,6 +6,7 @@ interface FeatureCardProps {
   title: string;
   description: string;
   delay?: number;
+  index?: number;
 }
 
 export default function FeatureCard({
@@ -13,52 +14,76 @@ export default function FeatureCard({
   title,
   description,
   delay = 0,
+  index = 1,
 }: FeatureCardProps) {
 
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [state, setState] = useState<"initial" | "visible" | "exited">("initial");
+  const hasEntered = useRef(false);
 
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => {
-            setVisible(true);
-          }, delay);
+          if (!hasEntered.current) {
+            setTimeout(() => {
+              hasEntered.current = true;
+              setState("visible");
+            }, delay);
+          } else {
+            setState("visible");
+          }
+        } else if (hasEntered.current) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < 80) {
+            setState("exited");
+          }
         }
       },
-      {
-        threshold: 0.2,
-      }
+      { threshold: 0.5, rootMargin: "-40% 0px -15% 0px" }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
+    observer.observe(el);
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
+      observer.unobserve(el);
     };
   }, [delay]);
 
   return (
     <div
       ref={ref}
-      className={`feature-card ${visible ? "visible" : ""}`}
+      className={`feature-card ${state}`}
     >
-      <div className="feature-icon">
-        {icon}
+      {/* Terminal title bar */}
+      <div className="feature-terminal-bar">
+        <div className="feature-terminal-dots">
+          <div className="feature-terminal-dot" />
+          <div className="feature-terminal-dot" />
+          <div className="feature-terminal-dot" />
+        </div>
+        <div className="feature-terminal-label">
+          key_feature_#{index}
+        </div>
       </div>
 
-      <h3 className="feature-title">
-        {title}
-      </h3>
+      {/* Card body */}
+      <div className="feature-body">
+        <div className="feature-icon">
+          {icon}
+        </div>
 
-      <p className="feature-description">
-        {description}
-      </p>
+        <h3 className="feature-title">
+          {title}
+        </h3>
+
+        <p className="feature-description">
+          {description}
+        </p>
+      </div>
     </div>
   );
 }

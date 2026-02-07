@@ -8,7 +8,10 @@ import AbstractScoreGauge from "./components/AbstractScoreGauge";
 import ParticlesPanel from "./components/ParticlesPanel";
 import RelatedPapersChart from "./components/RelatedPapersChart";
 import ChatPanel from "./components/ChatPanel";
+import ModelFlowchart from "./components/ModelFlowchart";
+import CustomCursor from "./components/CustomCursor";
 import "./App.css"
+import "./components/TabBar.css"
 
 interface ChunkScore {
   text: string;
@@ -53,7 +56,7 @@ interface PaperAnalysis {
 export default function App() {
   const [arxivInput, setArxivInput] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
-  const [activeTab, setActiveTab] = useState<"relevance" | "key_sections" | "related_papers" | "research_query">("key_sections");
+  const [activeTab, setActiveTab] = useState<"relevance" | "key_sections" | "related_papers" | "research_query" | "model_flowchart">("key_sections");
 
   const [response, setResponse] = useState<PaperAnalysis | null>(null);
   const [similarity, setSimilarity] = useState<SimilarityResult | null>(null);
@@ -133,6 +136,7 @@ export default function App() {
   }
   return (
     <>
+      <CustomCursor />
       <NavBar />
       {/* Introduction Section */}
       <div
@@ -164,10 +168,10 @@ export default function App() {
           <AnimatedTitle />
 
           <h2 style={{
-            fontFamily: "'Roboto Mono', monospace",
-            fontWeight: 400,
+            fontFamily: "'JetBrains Mono', monospace",
+            fontWeight: 600,
             fontSize: "3.0rem",
-            color: "#e6effcdb",
+            color: "#eeeeeeef",
             marginTop: "0",
             marginLeft: "0",
             marginRight: "0",
@@ -191,7 +195,8 @@ export default function App() {
         gap: "2rem",
         justifyContent: "center"
       }}>
-        <FeatureCard 
+        <FeatureCard
+        index={1}
         delay={200}
         icon={
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
@@ -199,10 +204,11 @@ export default function App() {
           <path d="M18.75 6.75h1.875c.621 0 1.125.504 1.125 1.125V18a1.5 1.5 0 0 1-3 0V6.75Z" />
         </svg>
         }
-        title="Search & Analyze" 
+        title="> Search & Analyze" 
         description="Enter an arXiv link or ID to extract key insights" />
 
-        <FeatureCard 
+        <FeatureCard
+        index={2}
         delay={450}
         icon={
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
@@ -210,9 +216,10 @@ export default function App() {
           <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.125 4.5a4.125 4.125 0 1 0 2.338 7.524l2.007 2.006a.75.75 0 1 0 1.06-1.06l-2.006-2.007a4.125 4.125 0 0 0-3.399-6.463Z" clipRule="evenodd" />
         </svg>
         }
-        title="Semantic Search" description="Locate relevant sections using AI-powered similarity search" />
+        title="> Semantic Search" description="Locate relevant sections using AI-powered similarity search" />
 
-        <FeatureCard 
+        <FeatureCard
+        index={3}
         delay={700}
         icon={
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
@@ -220,8 +227,9 @@ export default function App() {
             <path fillRule="evenodd" d="M9.013 19.9a.75.75 0 0 1 .877-.597 11.319 11.319 0 0 0 4.22 0 .75.75 0 1 1 .28 1.473 12.819 12.819 0 0 1-4.78 0 .75.75 0 0 1-.597-.876ZM9.754 22.344a.75.75 0 0 1 .824-.668 13.682 13.682 0 0 0 2.844 0 .75.75 0 1 1 .156 1.492 15.156 15.156 0 0 1-3.156 0 .75.75 0 0 1-.668-.824Z" clipRule="evenodd" />
           </svg>
         }
-        title="Discover Papers" description="Get ranked recommendations from arXiv" />
-        <FeatureCard 
+        title="> Discover Papers" description="Get ranked recommendations from arXiv" />
+        <FeatureCard
+        index={4}
         delay={1000}
         icon={
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
@@ -229,193 +237,183 @@ export default function App() {
           </svg>
 
         }
-        title="Research Query" description="Chat with the document and get answers supported by its text." />
+        title="> Research Query" description="Chat with the document and get answers supported by its text." />
       </div>
 
       {/* ================= MAIN CONTENT ================= */}
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 2rem 2rem" }}>
 
-        {/* ARXIV INPUT SECTION */}
-        <div style={{ marginTop: "1.5rem" }}>
-          <label style={{
-            display: "block",
-            marginBottom: "0.5rem",
-            fontWeight: 600,
-            fontSize: "1.3rem",
-            textAlign: "left",
-            letterSpacing: "-0.5px",
-            fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-          }}>
-            Enter either an arXiv Link or Identifer below:
-          </label>
-          <input
-            type="text"
-            placeholder="1111.11111 or https://arxiv.org/abs/1111.11111"
-            value={arxivInput}
-            onChange={(e) => setArxivInput(e.target.value)}
-            style={{
-              width: "100%",
-              height: "48px",
-              padding: "0 0.75rem",
-              borderRadius: 8,
-              border: "2px solid #ccff00",
-              fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-              fontSize: "0.95rem",
-              background: "#0f0f0f",
-              color: "#ccff00",
-              caretColor: "#ccff00",
-              outline: "none",
-            }}
-          />
-        </div>
-
-        {/* USER RESEARCH PROMPT */}
-        <div style={{ marginTop: "1.5rem" }}>
-          <label style={{
-            display: "block",
-            marginBottom: "0.5rem",
-            fontWeight: 600,
-            fontSize: "1.3rem",
-            textAlign: "left",
-            letterSpacing: "-0.5px",
-            fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-          }}>
-            Briefly describe the research topic your exploring:
-          </label>
-          <textarea
-            value={userPrompt}
-            onChange={(e) => setUserPrompt(e.target.value)}
-            placeholder="e.g., I'm researching semantic segmentation models to improve the..."
-            style={{
-              width: "100%",
-              minHeight: "100px",
-              padding: "0.75rem",
-              borderRadius: 8,
-              border: "2px solid #ccff00",
-              fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-              fontSize: "0.95rem",
-              resize: "vertical",
-              background: "#0f0f0f",
-              color: "#ccff00",
-              caretColor: "#ccff00",
-              outline: "none",
-            }}
-          />
-        </div>
-
-        <button
-          style={{
-            marginTop: "1.5rem",
-            padding: "1.25rem 3rem",
-            borderRadius: 12,
-            border: "none",
-            cursor: loading ? "not-allowed" : "pointer",
-            fontWeight: 700,
-            fontSize: "1.7rem",
-            fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-            background: loading
-              ? "#333"
-              : "linear-gradient(135deg, #ccff00, #39ff14)",
-            color: "#000",
-            opacity: loading ? 0.7 : 1,
-            letterSpacing: "0.5px",
-            transition: "opacity 0.2s ease, transform 0.15s ease",
-            width: "50%",
-            display: "block",
-            margin: "1.5rem auto 0",
-            outline: "none",
-          }}
-          onClick={handleAnalyze}
-          disabled={loading}
+        {/* TERMINAL INPUT SECTION */}
+        <div style={{
+          marginTop: "4.5rem",
+          background: "#0f0f0f",
+          border: "1px solid #2a2a2a",
+          borderRadius: 10,
+          overflow: "hidden",
+          fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+          transition: "box-shadow 0.3s ease, border-color 0.3s ease",
+          marginBottom: "4.0rem"
+        }}
           onMouseEnter={(e) => {
-            if (!loading) e.currentTarget.style.transform = "translateY(-10px)";
+            e.currentTarget.style.boxShadow = "0 0 5px rgba(199, 255, 0, 0.6)";
+            e.currentTarget.style.borderColor = "#c7ff00";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "none";
+            e.currentTarget.style.borderColor = "#2a2a2a";
           }}
         >
-          {loading ? "Analyzing..." : "Analyze"}
-        </button>
+          {/* Terminal title bar */}
+          <div style={{
+            background: "#c7ff00",
+            padding: "0.5rem 1rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}>
+            <div style={{ display: "flex", gap: "0.35rem" }}>
+              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#000" }} />
+              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#000" }} />
+              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#000" }} />
+            </div>
+            <div style={{
+              fontSize: "0.75rem",
+              color: "#000",
+              letterSpacing: "0.03em",
+              fontWeight: 600,
+            }}>
+              liu_michael — -zsh
+            </div>
+          </div>
 
-        <hr style={{ margin: "2rem 0" }} />
+          {/* Terminal body */}
+          <div style={{ padding: "1.25rem 1.25rem 1.5rem" }}>
+            {/* arXiv input */}
+            <label style={{
+              display: "block",
+              marginBottom: "0.5rem",
+              fontWeight: 400,
+              fontSize: "1.1rem",
+              textAlign: "left",
+              letterSpacing: "-0.5px",
+              color: "#d1d1d1",
+            }}>
+              $ input.arxiv ~%
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. 1111.11111 or https://arxiv.org/abs/1111.11111"
+              value={arxivInput}
+              onChange={(e) => setArxivInput(e.target.value)}
+              className="terminal-input"
+              style={{
+                width: "100%",
+                height: "48px",
+                padding: "0 0.75rem",
+                borderRadius: 0,
+                border: "none",
+                borderBottom: "1px solid #333",
+                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                fontSize: "0.95rem",
+                background: "transparent",
+                color: "#ccff00",
+                outline: "none",
+                boxSizing: "border-box",
+              }}
+            />
+
+            {/* Research prompt */}
+            <label style={{
+              display: "block",
+              marginTop: "1.25rem",
+              marginBottom: "0.5rem",
+              fontWeight: 400,
+              fontSize: "1.1rem",
+              textAlign: "left",
+              letterSpacing: "-0.5px",
+              color: "#d0d0d0",
+            }}>
+              $ input.topic ~%
+            </label>
+            <textarea
+              value={userPrompt}
+              onChange={(e) => setUserPrompt(e.target.value)}
+              placeholder="e.g., I'm researching semantic segmentation models to improve the..."
+              className="terminal-input"
+              style={{
+                width: "100%",
+                minHeight: "100px",
+                padding: "0.75rem",
+                borderRadius: 0,
+                border: "none",
+                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                fontSize: "0.95rem",
+                resize: "vertical",
+                background: "transparent",
+                color: "#ccff00",
+                outline: "none",
+                boxSizing: "border-box",
+              }}
+            />
+
+            <button
+              style={{
+                padding: "1.25rem 3rem",
+                borderRadius: 12,
+                border: "none",
+                cursor: loading ? "not-allowed" : "pointer",
+                fontWeight: 400,
+                fontSize: "1.3rem",
+                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                background: loading
+                  ? "linear-gradient(135deg, #ccff00, #76ff14)"
+                  : "linear-gradient(135deg, #ccff00, #76ff14)",
+                color: "#000",
+                opacity: loading ? 0.7 : 1,
+                letterSpacing: "0.5px",
+                transition: "opacity 0.2s ease, transform 0.15s ease",
+                width: "17%",
+                outline: "none",
+                margin: "2rem auto 0 auto",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onClick={handleAnalyze}
+              disabled={loading}
+              onMouseEnter={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.transform = "translateY(-10px) scale(1.25)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+              }}
+            >
+              {loading ? "Analyzing..." : "Analyze"}
+            </button>
+          </div>
+        </div>
 
         {/* TABS */}
-        <div style={{
-          display: "flex",
-          gap: "0.5rem",
-          marginBottom: "1.5rem",
-          borderBottom: "1px solid #444",
-          justifyContent: "center"
-        }}>
-          <button
-            onClick={() => setActiveTab("key_sections")}
-            style={{
-              padding: "0.75rem 1.5rem",
-              background: "transparent",
-              border: "none",
-              borderBottom: activeTab === "key_sections" ? "2px solid #c7ff00" : "2px solid transparent",
-              cursor: "pointer",
-              fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-              fontWeight: 600,
-              fontSize: "1rem",
-              color: activeTab === "key_sections" ? "#c7ff00" : "#aaa",
-              transition: "all 0.2s ease",
-            }}
-          >
-            Key Sections
-          </button>
-          <button
-            onClick={() => setActiveTab("relevance")}
-            style={{
-              padding: "0.75rem 1.5rem",
-              background: "transparent",
-              border: "none",
-              borderBottom: activeTab === "relevance" ? "2px solid #c7ff00" : "2px solid transparent",
-              cursor: "pointer",
-              fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-              fontWeight: 600,
-              fontSize: "1rem",
-              color: activeTab === "relevance" ? "#c7ff00" : "#aaa",
-              transition: "all 0.2s ease",
-            }}
-          >
-            Relevance Score
-          </button>
-          <button
-            onClick={() => setActiveTab("related_papers")}
-            style={{
-              padding: "0.75rem 1.5rem",
-              background: "transparent",
-              border: "none",
-              borderBottom: activeTab === "related_papers" ? "2px solid #c7ff00" : "2px solid transparent",
-              cursor: "pointer",
-              fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-              fontWeight: 600,
-              fontSize: "1rem",
-              color: activeTab === "related_papers" ? "#c7ff00" : "#aaa",
-              transition: "all 0.2s ease",
-            }}
-          >
-            Related Papers
-          </button>
-          <button
-            onClick={() => setActiveTab("research_query")}
-            style={{
-              padding: "0.75rem 1.5rem",
-              background: "transparent",
-              border: "none",
-              borderBottom: activeTab === "research_query" ? "2px solid #c7ff00" : "2px solid transparent",
-              cursor: "pointer",
-              fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-              fontWeight: 600,
-              fontSize: "1rem",
-              color: activeTab === "research_query" ? "#c7ff00" : "#aaa",
-              transition: "all 0.2s ease",
-            }}
-          >
-            Research Query
-          </button>
+        <div className="tab-bar">
+          {([
+            { key: "key_sections" as const, label: "Key Sections" },
+            { key: "relevance" as const, label: "Relevance Score" },
+            { key: "related_papers" as const, label: "Related Papers" },
+            { key: "research_query" as const, label: "Research Query" },
+            { key: "model_flowchart" as const, label: "Model Flowchart" },
+          ]).map((tab) => (
+            <button
+              key={tab.key}
+              className={`tab-btn${activeTab === tab.key ? " active" : ""}`}
+              onClick={() => setActiveTab(tab.key)}
+            >
+              <span className="tab-label">{tab.label}</span>
+            </button>
+          ))}
         </div>
+        <div className="tab-divider" />
 
         {/* TAB CONTENT */}
         {error && <p style={{ color: "red", fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" }}>{error}</p>}
@@ -487,12 +485,29 @@ export default function App() {
           </div>
         )}
 
+        {activeTab === "model_flowchart" && (
+          <div>
+            <ModelFlowchart />
+          </div>
+        )}
+
         {activeTab === "research_query" && (
           <div>
             <ChatPanel arxivId={arxivInput} />
           </div>
         )}
       </div>
+
+      <footer style={{
+        padding: "2rem 2rem 1.5rem",
+        textAlign: "right",
+        fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+        fontSize: "1.05rem",
+        color: "#bfff00",
+        letterSpacing: "0.03em",
+      }}>
+        ARXTRACT · Built by Michael Liu · 2026
+      </footer>
     </>
   );
 }

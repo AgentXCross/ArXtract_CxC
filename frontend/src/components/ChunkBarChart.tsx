@@ -31,7 +31,7 @@ export default function ChunkBarChart({ chunks }: ChunkBarChartProps) {
         transition: "box-shadow 0.3s ease, border-color 0.3s ease",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = "0 0 20px rgba(199, 255, 0, 0.6)";
+        e.currentTarget.style.boxShadow = "0 0 5px rgba(199, 255, 0, 0.6)";
         e.currentTarget.style.borderColor = "#c7ff00";
       }}
       onMouseLeave={(e) => {

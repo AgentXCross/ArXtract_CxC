@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import "../App.css";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -13,11 +14,36 @@ export default function ChatPanel({ arxivId }: ChatPanelProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [typingIndex, setTypingIndex] = useState<number | null>(null);
+  const [displayedChars, setDisplayedChars] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    const container = messagesContainerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [messages, displayedChars]);
+
+  // Typewriter effect
+  useEffect(() => {
+    if (typingIndex === null) return;
+    const msg = messages[typingIndex];
+    if (!msg) return;
+
+    const fullLength = msg.content.length;
+    if (displayedChars >= fullLength) {
+      setTypingIndex(null);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setDisplayedChars(prev => Math.min(prev + 2, fullLength));
+    }, 12);
+
+    return () => clearTimeout(timer);
+  }, [typingIndex, displayedChars, messages]);
 
   async function handleSend() {
     const query = input.trim();
@@ -40,15 +66,34 @@ export default function ChatPanel({ arxivId }: ChatPanelProps) {
       }
 
       const data = await res.json();
-      setMessages(prev => [...prev, { role: "assistant", content: data.answer }]);
+      setMessages(prev => {
+        const newMessages = [...prev, { role: "assistant" as const, content: data.answer }];
+        setTypingIndex(newMessages.length - 1);
+        setDisplayedChars(0);
+        return newMessages;
+      });
     } catch {
-      setMessages(prev => [...prev, { role: "assistant", content: "Something went wrong. Please try again." }]);
+      setMessages(prev => {
+        const newMessages = [...prev, { role: "assistant" as const, content: "Something went wrong. Please try again." }];
+        setTypingIndex(newMessages.length - 1);
+        setDisplayedChars(0);
+        return newMessages;
+      });
     } finally {
       setLoading(false);
     }
   }
 
   const mono = "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+
+  function getDisplayContent(msg: ChatMessage, index: number) {
+    if (msg.role === "assistant" && index === typingIndex) {
+      return msg.content.slice(0, displayedChars);
+    }
+    return msg.content;
+  }
+
+  const isTyping = typingIndex !== null;
 
   return (
     <div
@@ -63,9 +108,10 @@ export default function ChatPanel({ arxivId }: ChatPanelProps) {
         display: "flex",
         flexDirection: "column",
         height: 500,
+        alignItems: "left"
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = "0 0 20px rgba(199, 255, 0, 0.6)";
+        e.currentTarget.style.boxShadow = "0 0 5px rgba(199, 255, 0, 0.6)";
         e.currentTarget.style.borderColor = "#c7ff00";
       }}
       onMouseLeave={(e) => {
@@ -101,7 +147,7 @@ export default function ChatPanel({ arxivId }: ChatPanelProps) {
       </div>
 
       {/* Messages area */}
-      <div style={{
+      <div ref={messagesContainerRef} style={{
         flex: 1,
         overflowY: "auto",
         padding: "1rem 1.25rem",
@@ -139,7 +185,18 @@ export default function ChatPanel({ arxivId }: ChatPanelProps) {
               lineHeight: 1.6,
               whiteSpace: "pre-wrap",
             }}>
-              {msg.content}
+              {getDisplayContent(msg, i)}
+              {msg.role === "assistant" && i === typingIndex && (
+                <span style={{
+                  display: "inline-block",
+                  width: "0.5em",
+                  height: "1em",
+                  background: "#c7ff00",
+                  marginLeft: "2px",
+                  verticalAlign: "text-bottom",
+                  animation: "cursor-blink 0.7s step-end infinite",
+                }} />
+              )}
             </div>
           </div>
         ))}
@@ -176,14 +233,15 @@ export default function ChatPanel({ arxivId }: ChatPanelProps) {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") handleSend(); }}
           placeholder="Ask about the paper..."
+          className="terminal-input"
           style={{
             flex: 1,
             padding: "0.6rem 0.75rem",
-            borderRadius: 8,
-            border: "1px solid #444",
-            background: "#111",
+            borderRadius: 0,
+            border: "none",
+            borderBottom: "1px solid #333",
+            background: "transparent",
             color: "#ccff00",
-            caretColor: "#ccff00",
             fontFamily: mono,
             fontSize: "0.85rem",
             outline: "none",
@@ -191,18 +249,18 @@ export default function ChatPanel({ arxivId }: ChatPanelProps) {
         />
         <button
           onClick={handleSend}
-          disabled={loading || !input.trim()}
+          disabled={loading || !input.trim() || isTyping}
           style={{
             padding: "0.6rem 1.25rem",
             borderRadius: 8,
             border: "none",
-            background: loading || !input.trim() ? "#333" : "linear-gradient(135deg, #ccff00, #39ff14)",
+            background: loading || !input.trim() || isTyping ? "#333" : "linear-gradient(135deg, #ccff00, #39ff14)",
             color: "#000",
             fontWeight: 700,
             fontSize: "0.85rem",
             fontFamily: mono,
-            cursor: loading || !input.trim() ? "not-allowed" : "pointer",
-            opacity: loading || !input.trim() ? 0.5 : 1,
+            cursor: loading || !input.trim() || isTyping ? "not-allowed" : "pointer",
+            opacity: loading || !input.trim() || isTyping ? 0.5 : 1,
           }}
         >
           Send

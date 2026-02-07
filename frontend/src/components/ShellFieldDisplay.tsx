@@ -18,7 +18,7 @@ export default function ShellFieldDisplay({ label, value }: ShellFieldProps) {
         boxShadow: "inset 0 0 25px rgba(199, 255, 0, 0.06)",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = "0 0 20px rgba(199, 255, 0, 0.6)";
+        e.currentTarget.style.boxShadow = "0 0 5px rgba(199, 255, 0, 0.6)";
         e.currentTarget.style.borderColor = "#c7ff00";
       }}
       onMouseLeave={(e) => {
@@ -29,7 +29,7 @@ export default function ShellFieldDisplay({ label, value }: ShellFieldProps) {
       {/* Title bar - full width yellow bar */}
       <div
         style={{
-          background: "#c7ff00",
+          background: "#393939",
           padding: "0.5rem 1rem",
           display: "flex",
           alignItems: "center",
@@ -62,7 +62,7 @@ export default function ShellFieldDisplay({ label, value }: ShellFieldProps) {
         <div
           style={{
             fontSize: "0.75rem",
-            color: "#000000",
+            color: "#9dff00",
             textTransform: "lowercase",
             letterSpacing: "0.03em",
             fontWeight: 600,

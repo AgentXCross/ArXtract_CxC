@@ -1,10 +1,9 @@
 .feature-card {
   flex: 1;
-  background: rgb(0, 3, 17);
-  border: 1.0px solid #c0ff01;
-  border-radius: 20px;
-  padding: 2rem;
-  text-align: center;
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  overflow: hidden;
 
   opacity: 0;
   transform: translateX(80px) scale(0.95);
@@ -21,33 +20,72 @@
   transform: translateX(0) scale(1);
 }
 
-.feature-card:hover {
+.feature-card.exited {
+  opacity: 0;
+  transform: translateX(-120px) scale(0.9);
+}
+
+.feature-card.visible:hover {
   border-color: #c7ff00;
-  box-shadow: 0 0 25px rgb(200, 255, 0);
-  transform: translateX(0) scale(1.1);
+  transform: translateX(0) scale(1.2);
+}
+
+.feature-terminal-bar {
+  background: #c7ff00;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feature-terminal-dots {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.feature-terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #000;
+}
+
+.feature-terminal-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  color: #000;
+  letter-spacing: 0.03em;
+  font-weight: 600;
+}
+
+.feature-body {
+  padding: 1.25rem;
+  text-align: left;
 }
 
 .feature-icon {
-  width: 3rem;
-  height: 3rem;
-  margin: 0 auto 0.45rem auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 0.5rem;
   color: #b3ff00;
 }
 
 .feature-title {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 1.7rem;
+  font-size: 1.15rem;
   color: #f7ffe3;
   margin: 0;
-  letter-spacing: -0.7px;
+  letter-spacing: 0.5px;
   line-height: 1;
+  text-align: left;
 }
 
 .feature-description {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  color: #f1ffd0;
-  font-size: 0.95rem;
+  color: #aaa;
+  font-size: 0.85rem;
   margin-top: 0.5rem;
-  margin-bottom: 0.01rem;
-  line-height: 1.4;
+  margin-bottom: 0;
+  line-height: 1.5;
+  text-align: left;
 }

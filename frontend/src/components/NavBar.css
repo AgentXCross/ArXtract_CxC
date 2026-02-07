@@ -13,8 +13,9 @@
 
   background: linear-gradient(
     180deg,
-    #0101ee 0%,
-    #020221 100%
+    /*#0101ee 0%,*/
+    #d40078 0%,
+    #06000a 100%
   );
 
   box-shadow: 0 0 0px rgba(13, 2, 78, 0.35);
@@ -72,5 +73,5 @@
 .github-button:hover {
   transform: scale(1.08);
   color: #000000;
-  box-shadow: 0 0 15px rgb(0, 255, 255), 0 0 30px rgb(0, 255, 255), 0 0 45px rgb(0, 255, 255);
+  box-shadow: 0 0 30px rgb(212, 255, 0), 0 0 30px rgb(212, 255, 0), 0 0 30px rgb(212, 255, 0);
 }

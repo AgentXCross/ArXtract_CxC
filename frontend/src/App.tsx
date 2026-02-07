@@ -64,6 +64,8 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const API_BASE = import.meta.env.VITE_API_URL;
+
   async function handleAnalyze() {
     setError(null);
     setResponse(null);
@@ -77,7 +79,7 @@ export default function App() {
       }
 
       // Always fetch paper extraction
-      const extractionPromise = fetch("http://localhost:8000/paper/from-arxiv", {
+      const extractionPromise = fetch(`${API_BASE}/paper/from-arxiv`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ arxiv_id: arxivInput }),
@@ -85,7 +87,7 @@ export default function App() {
 
       // Fetch similarity and related papers only if user provided a research prompt
       const similarityPromise = userPrompt.trim()
-        ? fetch("http://localhost:8000/paper/similarity", {
+        ? fetch(`${API_BASE}/paper/similarity`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ arxiv_id: arxivInput, query: userPrompt }),
@@ -93,7 +95,7 @@ export default function App() {
         : null;
 
       const relatedPromise = userPrompt.trim()
-        ? fetch("http://localhost:8000/paper/related", {
+        ? fetch(`${API_BASE}/paper/related`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ arxiv_id: arxivInput, query: userPrompt }),

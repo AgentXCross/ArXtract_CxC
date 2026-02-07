@@ -10,6 +10,7 @@ import RelatedPapersChart from "./components/RelatedPapersChart";
 import ChatPanel from "./components/ChatPanel";
 import ModelFlowchart from "./components/ModelFlowchart";
 import CustomCursor from "./components/CustomCursor";
+import { Analytics } from "@vercel/analytics/react";
 import "./App.css"
 import "./components/TabBar.css"
 
@@ -510,6 +511,7 @@ export default function App() {
       }}>
         ARXTRACT · Built by Michael Liu · 2026
       </footer>
+      <Analytics />
     </>
   );
 }

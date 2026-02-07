@@ -14,6 +14,7 @@
     "@tsparticles/plugin-emitters": "^3.9.1",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.9.1",
+    "@vercel/analytics": "^1.6.1",
     "mermaid": "^11.12.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"

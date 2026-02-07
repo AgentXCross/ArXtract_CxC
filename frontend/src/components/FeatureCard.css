@@ -1,0 +1,53 @@
+.feature-card {
+  flex: 1;
+  background: rgb(0, 3, 17);
+  border: 1.0px solid #c0ff01;
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+
+  opacity: 0;
+  transform: translateX(80px) scale(0.95);
+
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.feature-card.visible {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.feature-card:hover {
+  border-color: #c7ff00;
+  box-shadow: 0 0 25px rgb(200, 255, 0);
+  transform: translateX(0) scale(1.1);
+}
+
+.feature-icon {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 0.45rem auto;
+  color: #b3ff00;
+}
+
+.feature-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1.7rem;
+  color: #f7ffe3;
+  margin: 0;
+  letter-spacing: -0.7px;
+  line-height: 1;
+}
+
+.feature-description {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: #f1ffd0;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.01rem;
+  line-height: 1.4;
+}

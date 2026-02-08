@@ -104,12 +104,18 @@ def extract_basic_info(text: str) -> dict:
         temperature = 0.0
     )
 
-    raw_content = response.choices[0].message.content
+    raw_content = response.choices[0].message.content or ""
+
+    # Strip markdown fences if the LLM wraps its response
+    cleaned = raw_content.strip()
+    if cleaned.startswith("```"):
+        cleaned = re.sub(r'^```(?:json)?\s*', '', cleaned)
+        cleaned = re.sub(r'\s*```$', '', cleaned)
 
     try:
-        data = json.loads(raw_content)
+        data = json.loads(cleaned)
     except json.JSONDecodeError as e:
-        raise ValueError(f"LLM returned invalid JSON: {e}")
+        raise ValueError(f"LLM returned invalid JSON: {e}\nRaw response: {raw_content[:500]}")
 
     try:
         paper = PaperExtraction(**data)

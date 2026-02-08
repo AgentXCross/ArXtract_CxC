@@ -67,7 +67,7 @@ def fetch_arxiv_pdf(arxiv_id: str) -> bytes:
     response = requests.get(
         pdf_url,
         headers = {"User-Agent": "ArXtract/0.1"},
-        timeout = 20,
+        timeout = 90,
     )
     if response.status_code != 200:
         raise ValueError(
@@ -96,7 +96,7 @@ def fetch_arxiv_abstract(arxiv_id: str) -> str:
         ARXIV_API_BASE_URL,
         params = {"id_list": arxiv_id},
         headers = {"User-Agent": "ArXtract/0.1"},
-        timeout = 15,
+        timeout = 90,
     )
     if response.status_code != 200:
         raise ValueError(f"arXiv API request failed (status {response.status_code})")
@@ -129,7 +129,7 @@ def search_arxiv(keywords: str, max_results: int = 5) -> list[dict]:
             "sortOrder": "descending",
         },
         headers = {"User-Agent": "ArXtract/0.1"},
-        timeout = 30,
+        timeout = 90,
     )
     if response.status_code != 200:
         raise ValueError(f"arXiv search failed (status {response.status_code})")

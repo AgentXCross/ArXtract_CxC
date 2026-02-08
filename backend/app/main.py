@@ -9,8 +9,11 @@ The API coordinates the following stages:
 - Returning structured analysis results to the frontend
 """
 
+import logging
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+
+logger = logging.getLogger("uvicorn.error")
 
 from pydantic import BaseModel
 
@@ -66,6 +69,7 @@ def paper_from_arxiv(req: ArxivRequest):
     try:
         result = extract_basic_info(text)
     except Exception as e:
+        logger.error(f"LLM extraction failed: {e}", exc_info=True)
         raise HTTPException(
             status_code = 500,
             detail = f"LLM extraction failed: {e}"

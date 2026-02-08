@@ -10,11 +10,10 @@ ArXtract is a research intelligence engine that transforms any arXiv paper into 
 
 **Paste an arXiv link. Enter your research interests. Get everything you need.**
 
-- **Key Sections** — Extracts title, problem statement, contribution, architecture, datasets, metrics, baselines, results, and limitations into structured fields.
-- **Relevance Scoring** — By entering your research topic, you get a 0–100 relevance score with the papers abtract and the top 5 most relevant text chunks
-- **Related Papers** — Discovers and ranks similar papers from arXiv based on your research interest by cosine similarity
-- **Research Query** — Ask follow-up questions about the paper and get grounded answers with cited chunks
-- **Model Flowchart** — Interactive, zoomable diagram showing the full processing pipeline
+* **Key Sections:** Extracts title, problem statement, contribution, architecture, datasets, metrics, baselines, results, limitations, etc. into structured fields.
+* **Relevance Scoring:** By entering your research topic, you get a 0–100 relevance score with the papers abtract and the top 5 most relevant text chunks.
+* **Related Papers:** Discovers and ranks similar papers from arXiv based on your research interest by cosine similarity.
+* **Research Query:** Ask follow-up questions about the paper and get context-constrained answers.
 
 ![System FlowChart](/frontend/src/assets/flowchart.png)
 

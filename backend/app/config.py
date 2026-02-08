@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-OPENAI_MODEL = "gpt-5.2"
+OPENAI_MODEL = "o4"
 OPENAI_EMBEDDING_MODEL = "text-embedding-3-small"
 
 MAX_PAPER_CHARS = 6000

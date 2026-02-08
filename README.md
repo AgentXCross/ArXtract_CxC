@@ -27,7 +27,7 @@ ArXtract is a research intelligence engine that transforms any arXiv paper into 
 | Charts | Mermaid.js, custom bar/gauge components |
 | Particles | tsParticles |
 | Backend | FastAPI, Python |
-| LLM | OpenAI GPT-5.2 |
+| LLM | OpenAI o4 |
 | Embeddings | text-embedding-3-small |
 | PDF Parsing | PyMuPDF |
 | Vector Math | NumPy (cosine similarity) |

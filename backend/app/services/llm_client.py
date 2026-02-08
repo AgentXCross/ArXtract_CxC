@@ -96,7 +96,7 @@ def extract_basic_info(text: str) -> dict:
         }}
 
         Paper text:
-        {text[:20000]}
+        {text[:30000]}
         """
     response = client.chat.completions.create(
         model = OPENAI_MODEL,

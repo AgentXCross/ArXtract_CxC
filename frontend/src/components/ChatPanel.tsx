@@ -55,7 +55,7 @@ export default function ChatPanel({ arxivId }: ChatPanelProps) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/paper/chat", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/paper/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ arxiv_id: arxivId, query }),
